@@ -1,0 +1,20 @@
+{
+  "name": "github-apps",
+  "packageManager": "yarn@3.2.1",
+  "type": "module",
+  "workspaces": [
+    "gh-pest",
+    "so-discord-bot"
+  ],
+  "prettier": {
+    "tabWidth": 2,
+    "bracketSpacing": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "avoid",
+    "endOfLine": "auto"
+  },
+  "dependencies": {
+    "prettier": "^2.7.1"
+  }
+}

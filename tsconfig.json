@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "commonjs",
+    "target": "es2017",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext",
+      "es2015.symbol"
+    ],
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+}
