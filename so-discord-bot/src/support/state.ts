@@ -9,6 +9,9 @@ export default new (class {
 
   public guildId: string = '870497948763566090';
 
+  public standupTimer: NodeJS.Timer | undefined;
+  public standupReminder: NodeJS.Timer | undefined;
+
   constructor() {
     this.state = {
       standup: {
@@ -21,6 +24,14 @@ export default new (class {
     setInterval(() => {
       this.persist();
     }, 10000);
+  }
+
+  setTimer(name: 'standupTimer' | 'standupReminder', timer: NodeJS.Timer) {
+    this[name] = timer;
+  }
+
+  getTimer(name: 'standupTimer' | 'standupReminder') {
+    return this[name];
   }
 
   setClient(client: Client) {
@@ -83,8 +94,8 @@ export default new (class {
   }
 
   persist() {
-    fs.writeFile('./state.json', JSON.stringify(this.state), () => {
-      log.debug('state persisted');
-    });
+    fs.writeFile('./state.json', JSON.stringify(this.state), () =>
+      log.trace('state persisted'),
+    );
   }
 })();

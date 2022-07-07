@@ -1,4 +1,4 @@
-import dailyStandup from './daily-job';
+import dailyStandup from './daily-schedule';
 import standupCtl from './standup-ctl';
 
 export default {

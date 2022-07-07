@@ -7,24 +7,29 @@ import badWords from './apps/bad-words';
 import standup from './apps/standup';
 import {BotApp} from './types/apps';
 import log from 'loglevel';
+import devtools from './apps/devtools';
 
 setUpLogger('debug');
 
 (async () => {
   /* Boot */
   const client = await startDiscordBot(process.env.DISCORD_BOT_TOKEN);
-  const apps = {badWords, standup} as Record<string, BotApp>;
+  const apps = Object.entries({badWords, standup, devtools} as Record<
+    string,
+    BotApp
+  >);
 
   /* Prepare support components */
   state.setClient(client).load();
 
-  Object.entries(apps).forEach(([name, app]) => {
+  log.info(`Loading ${apps.length} apps...`);
+
+  for (const [name, app] of apps) {
     log.debug(`Preparing bot app ${name}`);
 
     app.binders?.forEach(bind => bind(client));
-
     app.scheduled?.forEach(job =>
       prepareJob(client, name, job.rule(), job.job),
     );
-  });
+  }
 })();

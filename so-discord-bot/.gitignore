@@ -1,3 +1,4 @@
 tsconfig.tsbuildinfo
 .env
 state.json
+dist
