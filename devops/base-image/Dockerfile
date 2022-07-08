@@ -32,3 +32,5 @@ RUN ln -s ${COMPOSER_BIN} /usr/local/bin/composer &&\
     ln -s ${NODE_DIR}/npm /usr/local/bin/npm &&\
     ln -s ${NODE_DIR}/corepack /usr/local/bin/corepack &&\
     corepack enable && yarn set version berry
+
+ENV PATH=${NODE_DIR}:/root/.config/composer/vendor/bin:${PATH}
