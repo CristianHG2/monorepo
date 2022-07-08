@@ -1,3 +1,8 @@
+#
+# Format fix files using Prettier and Laravel Pint
+# Then lint using SuperLinter
+#
+
 on:
   workflow_call:
 
@@ -5,7 +10,26 @@ jobs:
   format:
     runs-on: ubuntu-latest
     container:
-      image: 714943446733.dkr.ecr.us-east-1.amazonaws.com/gh-workflows
+      image: cristianhg2/laravel-env:latest
       credentials:
-        username: AWS
-        password: ${ECR_PASSWORD}
+        username: cristianhg2
+        password: ${DOCKER_PASSWORD}
+    steps:
+      - name: Install formatter dependencies
+        run: |
+          export PATH=${NODE_DIR}:/root/.config/composer/vendor/bin:${PATH}
+          composer global require laravel/pint
+          npm install -g prettier
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Format JS/TS files
+        run: prettier --write '**/*.{js,ts}'
+
+      - name: Format PHP files
+        run: pint
+
+      - name: Commit and merge into head branch
+        run: git add -A && git commit -m "Prettier / Laravel Pint Fixes" && git push origin HEAD:${{ github.ref }}
+
