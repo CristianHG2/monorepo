@@ -10,7 +10,7 @@ ENV PV=${PHP_VERSION}
 
 ENV HOME=/root
 ENV NODE_BIN=$HOME/$NODE_DIST/bin
-ENV COMPOSER_BIN="$HOME/.composer/vendor/bin"
+ENV COMPOSER_BIN="$HOME/.config/composer/vendor/bin"
 
 WORKDIR $HOME
 
@@ -38,3 +38,7 @@ RUN corepack enable && yarn set version berry
 
 # Set environment variables
 ENV PATH="$NODE_BIN:$COMPOSER_BIN:$PATH"
+
+# Install Laravel Pint and Prettier
+RUN composer global require laravel/pint && \
+    npm install -g prettier
