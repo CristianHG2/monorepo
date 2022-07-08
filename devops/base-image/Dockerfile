@@ -14,26 +14,36 @@ ENV COMPOSER_BIN="$HOME/.config/composer/vendor/bin"
 
 WORKDIR $HOME
 
+COPY installers/composer.sh composer.sh
+COPY installers/bootstrap.sh bootstrap.sh
+
+COPY supports ./lva
+
+RUN chmod +x *.sh && chmod +x ./lva/*.sh
+
 RUN apt-get -y update && apt-get -y upgrade &&\
     apt-get install -y software-properties-common curl
 
 # PHP / MySQL
-RUN add-apt-repository -y ppa:ondrej/php && apt-get -y update && \
-    apt-get install -y git unzip &&\
-    apt-get install -y ${PV} ${PV}-mysql ${PV}-curl ${PV}-gd ${PV}-mbstring ${PV}-xml ${PV}-zip ${PV}-fileinfo php-pcov &&\
+RUN add-apt-repository -y ppa:ondrej/php && apt-get -y update &&\
+    apt-get install -y git unzip openssl 7zip &&\
+    apt-get install -y ${PV}-common ${PV}-bcmath ${PV}-curl ${PV}-mbstring ${PV}-xml ${PV}-mysql ${PV}-pcov &&\
     apt-get install -y mysql-server=8.0.29-0ubuntu0.22.04.2
+
+# Test Database
+RUN service mysql start &&\
+    mysql -e "CREATE USER 'test' IDENTIFIED BY 'test';" &&\
+    mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'test'; FLUSH PRIVILEGES;" &&\
+    mysql -u test -ptest -e "CREATE DATABASE test;"
 
 # Node
 RUN curl -LO https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DIST}.tar.xz &&\
     tar -xvf ${NODE_DIST}.tar.xz
 
-# Prepare composer
-COPY composer.sh composer.sh
-RUN chmod +x composer.sh && ./composer.sh
+# Run bootstrap before installing packages
+RUN ./bootstrap.sh
 
-# Link binaries
-COPY bootstrap.sh bootstrap.sh
-RUN chmod +x bootstrap.sh && ./bootstrap.sh
+# Prepare composer
 RUN corepack enable && yarn set version berry
 
 # Set environment variables
@@ -42,3 +52,11 @@ ENV PATH="$NODE_BIN:$COMPOSER_BIN:$PATH"
 # Install Laravel Pint and Prettier
 RUN composer global require laravel/pint && \
     npm install -g prettier
+
+# Export ENV for unit tests
+ENV DB_USERNAME=test
+ENV DB_PASSWORD=test
+ENV DB_DATABASE=test
+ENV DB_HOST=127.0.0.1
+ENV DB_CONNECTION=mysql
+
