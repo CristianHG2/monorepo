@@ -1,0 +1,11 @@
+on:
+  workflow_call:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    container:
+      image: 714943446733.dkr.ecr.us-east-1.amazonaws.com/gh-workflows
+      credentials:
+        username: AWS
+        password: ${ECR_PASSWORD}

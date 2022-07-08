@@ -32,6 +32,7 @@ export default {
   rule: () => {
     const rule = new RecurrenceRule();
     rule.hour = 12;
+    rule.minute = 0;
     rule.tz = 'America/Bogota';
     return rule;
   },
