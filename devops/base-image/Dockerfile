@@ -36,12 +36,14 @@ RUN service mysql start &&\
     mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'test'; FLUSH PRIVILEGES;" &&\
     mysql -u test -ptest -e "CREATE DATABASE test;"
 
-# Node
+# Node and Composer
 RUN curl -LO https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DIST}.tar.xz &&\
-    tar -xvf ${NODE_DIST}.tar.xz
+    tar -xvf ${NODE_DIST}.tar.xz &&\
+    rm ${NODE_DIST}.tar.xz &&\
+    sh composer.sh
 
 # Run bootstrap before installing packages
-RUN ./bootstrap.sh
+RUN sh bootstrap.sh
 
 # Prepare composer
 RUN corepack enable && yarn set version berry
