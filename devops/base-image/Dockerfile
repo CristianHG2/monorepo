@@ -27,7 +27,7 @@ RUN apt-get -y update && apt-get -y upgrade &&\
 # PHP / MySQL
 RUN add-apt-repository -y ppa:ondrej/php && apt-get -y update &&\
     apt-get install -y git unzip openssl 7zip &&\
-    apt-get install -y ${PV}-common ${PV}-bcmath ${PV}-curl ${PV}-mbstring ${PV}-xml ${PV}-mysql ${PV}-pcov &&\
+    apt-get install -y ${PV}-common ${PV}-bcmath ${PV}-curl ${PV}-mbstring ${PV}-xml ${PV}-mysql ${PV}-pcov ${PV}-gd &&\
     apt-get install -y mysql-server=8.0.29-0ubuntu0.22.04.2
 
 # Test Database
