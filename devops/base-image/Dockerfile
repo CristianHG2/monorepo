@@ -17,7 +17,7 @@ WORKDIR $HOME
 COPY installers/composer.sh composer.sh
 COPY installers/bootstrap.sh bootstrap.sh
 
-COPY supports ./lva
+COPY supports lva
 
 RUN chmod +x *.sh && chmod +x ./lva/*.sh
 
