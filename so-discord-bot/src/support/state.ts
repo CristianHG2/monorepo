@@ -3,6 +3,12 @@ import log from 'loglevel';
 import {Client} from 'discord.js';
 import {StandupParticipant, State} from '../types/state';
 
+type BreakTimer = {
+  minuteTimer: NodeJS.Timer;
+  mainTimer: NodeJS.Timer;
+  minutes: number;
+};
+
 export default new (class {
   public state: State;
   public client?: Client;
@@ -11,6 +17,7 @@ export default new (class {
 
   public standupTimer: NodeJS.Timer | undefined;
   public standupReminder: NodeJS.Timer | undefined;
+  public breakTimers: Record<string, BreakTimer> = {};
 
   constructor() {
     this.state = {
@@ -24,6 +31,32 @@ export default new (class {
     setInterval(() => {
       this.persist();
     }, 10000);
+  }
+
+  addBreakTimer(id: string, minutes: number, cb: () => void) {
+    this.breakTimers[id] = {
+      minutes,
+
+      minuteTimer: setInterval(() => {
+        this.breakTimers[id].minutes--;
+      }, 60 * 1000),
+
+      mainTimer: setTimeout(() => {
+        cb();
+        this.removeBreakTimer(id);
+      }, minutes * 60 * 1000),
+    };
+  }
+
+  getBreakTimer(id: string) {
+    return this.breakTimers[id];
+  }
+
+  removeBreakTimer(id: string) {
+    clearInterval(this.breakTimers[id].minuteTimer);
+    clearTimeout(this.breakTimers[id].mainTimer);
+
+    delete this.breakTimers[id];
   }
 
   setTimer(name: 'standupTimer' | 'standupReminder', timer: NodeJS.Timer) {

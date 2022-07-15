@@ -1,7 +1,7 @@
 import {Client} from 'discord.js';
 
 export default {
-  apps: [
+  binders: [
     (bot: Client) => {
       const notAllowed = ['angular', 'wordpress'];
 

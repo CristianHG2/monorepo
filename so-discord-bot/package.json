@@ -2,7 +2,7 @@
   "name": "@lifespikes/so-discord-bot",
   "scripts": {
     "dev": "tsc --watch & nodemon dist/index.js",
-    "prod": "nodemon dist/index.js"
+    "prod": "node dist/index.js"
   },
   "nodemonConfig": {
     "ignore": ["state.json", "tsconfig.tsbuildinfo"]

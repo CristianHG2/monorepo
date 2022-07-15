@@ -1,10 +1,7 @@
 import {Client} from 'discord.js';
-import schedule, {RecurrenceRule} from 'node-schedule';
+import schedule, {Range, RecurrenceRule} from 'node-schedule';
 import log from 'loglevel';
 import dayjs, {QUnitType} from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-
-dayjs.extend(relativeTime);
 
 const processesIn = (rule: RecurrenceRule) => {
   const nextInv = (u: QUnitType) =>
@@ -28,4 +25,22 @@ export const prepareJob = (
     log.info(`Executing job ${key}, next run in ${processesIn(rule)}`);
     callback(bot);
   });
+};
+
+type Frequencies = {[key: string]: string | Range | number | undefined};
+
+export const jobFrequency = (
+  {date, day, hour, minute}: Frequencies,
+  tz?: string,
+) => {
+  return new RecurrenceRule(
+    undefined,
+    undefined,
+    date,
+    day,
+    hour,
+    minute ?? 0,
+    undefined,
+    tz ?? 'America/New_York',
+  );
 };

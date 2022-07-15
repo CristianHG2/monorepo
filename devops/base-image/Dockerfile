@@ -11,6 +11,7 @@ ENV PV=${PHP_VERSION}
 ENV HOME=/root
 ENV NODE_BIN=$HOME/$NODE_DIST/bin
 ENV COMPOSER_BIN="$HOME/.config/composer/vendor/bin"
+ENV COMPOSER_HOME="$HOME/.config/composer"
 
 WORKDIR $HOME
 

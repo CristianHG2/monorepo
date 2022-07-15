@@ -22,6 +22,10 @@ export default {
           await message.channel.send(JSON.stringify(state.state));
         }
 
+        if (message.content === '!current-system-time') {
+          await message.channel.send(new Date().toString());
+        }
+
         if (message.content === '!test-standup-reminder') {
           await remindPending(bot);
           await message.reply('Triggered reminder manually');

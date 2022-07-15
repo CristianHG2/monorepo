@@ -1,4 +1,8 @@
-import {RecurrenceRule} from 'node-schedule';
+import {
+  RecurrenceRule,
+  RecurrenceSpecDateRange,
+  RecurrenceSpecObjLit,
+} from 'node-schedule';
 import {Client} from 'discord.js';
 
 export interface BotBind {

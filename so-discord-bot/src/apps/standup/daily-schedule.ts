@@ -1,4 +1,4 @@
-import {RecurrenceRule} from 'node-schedule';
+import {Range, RecurrenceRule} from 'node-schedule';
 import {
   Client,
   MessageActionRow,
@@ -11,6 +11,7 @@ import {insensitiveFindChannel} from '../../services/discord/helpers';
 import {actions} from './constants';
 import {makeEmbed} from './notice-embed';
 import {startStandupMonitor} from './participation';
+import {jobFrequency} from '../../support/scheduler';
 
 const standupMessage = async (): Promise<MessageOptions> => {
   return {
@@ -29,13 +30,7 @@ const standupMessage = async (): Promise<MessageOptions> => {
 };
 
 export default {
-  rule: () => {
-    const rule = new RecurrenceRule();
-    rule.hour = 12;
-    rule.minute = 0;
-    rule.tz = 'America/Bogota';
-    return rule;
-  },
+  rule: () => jobFrequency({day: new Range(1, 5), hour: 12}, 'America/Bogota'),
 
   job: async (bot: Client) => {
     const channel = await insensitiveFindChannel(bot, 'general');

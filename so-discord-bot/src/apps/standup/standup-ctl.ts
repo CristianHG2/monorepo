@@ -9,6 +9,8 @@ import state from '../../support/state';
 import * as events from 'events';
 import {getMembers} from '../../services/discord/helpers';
 import {actions} from './constants';
+import dailySchedule from './daily-schedule';
+import dayjs from 'dayjs';
 
 const memberListEmbed = async (bot: Client): Promise<MessageEmbed> => {
   const members = await getMembers(bot);
@@ -52,6 +54,18 @@ export default (bot: Client) => {
   bot.on('messageCreate', async interaction => {
     if (interaction.author.bot || !interaction.inGuild()) {
       return;
+    }
+
+    if (interaction.content === '!next-standup') {
+      const nextInv = dayjs(
+        dailySchedule.rule().nextInvocationDate(new Date()),
+      );
+
+      await interaction.reply(
+        `Next standup takes place ${dayjs().to(nextInv)} _(${nextInv.format(
+          'LLLL',
+        )})_`,
+      );
     }
 
     if (interaction.content === '!standup-ctl') {
