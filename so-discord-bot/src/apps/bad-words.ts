@@ -3,7 +3,7 @@ import {Client} from 'discord.js';
 export default {
   binders: [
     (bot: Client) => {
-      const notAllowed = ['angular', 'wordpress'];
+      const notAllowed = ['angular'];
 
       bot.on('messageCreate', async interaction => {
         if (interaction.author.bot || !interaction.inGuild()) {

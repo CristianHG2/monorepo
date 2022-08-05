@@ -28,9 +28,18 @@ export default new (class {
       },
     };
 
+    process.on('exit', () => {
+      this.persist();
+    });
+
     setInterval(() => {
       this.persist();
     }, 10000);
+  }
+
+  addSlice(state: Record<string, unknown>) {
+    this.state = {...this.state, ...{slice: state}};
+    return this.state;
   }
 
   addBreakTimer(id: string, minutes: number, cb: () => void) {

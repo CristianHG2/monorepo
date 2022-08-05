@@ -33,9 +33,11 @@ RUN add-apt-repository -y ppa:ondrej/php && apt-get -y update &&\
 
 # Test Database
 RUN service mysql start &&\
+    update-rc.d mysql defaults &&\
     mysql -e "CREATE USER 'test' IDENTIFIED BY 'test';" &&\
     mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'test'; FLUSH PRIVILEGES;" &&\
-    mysql -u test -ptest -e "CREATE DATABASE test;"
+    mysql -u test -ptest -e "CREATE DATABASE test;" &&\
+    service mysql stop
 
 # Node and Composer
 RUN curl -LO https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DIST}.tar.xz &&\
@@ -62,4 +64,3 @@ ENV DB_PASSWORD=test
 ENV DB_DATABASE=test
 ENV DB_HOST=127.0.0.1
 ENV DB_CONNECTION=mysql
-
