@@ -1,3 +1,5 @@
+import invoice from './apps/invoice';
+
 process.env.TZ = 'America/Bogota';
 
 import 'dotenv/config';
@@ -25,6 +27,7 @@ const enabledApps = {
   standup,
   devtools,
   breakTimer,
+  invoice,
 };
 
 (async () => {

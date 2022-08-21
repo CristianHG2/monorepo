@@ -12,6 +12,9 @@ declare global {
       DISCORD_PUBLIC_KEY: string;
       DISCORD_BOT_TOKEN: string;
       OPENAI_API_KEY: string;
+      QUICKBOOKS_CLIENT_ID: string;
+      QUICKBOOKS_CLIENT_SECRET: string;
+      QUICKBOOKS_REALM_ID: string;
     }
   }
 }

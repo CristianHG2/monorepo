@@ -26,6 +26,7 @@ export default new (class {
         pending: [],
         participants: [],
       },
+      cache: {},
     };
 
     process.on('exit', () => {
@@ -40,6 +41,22 @@ export default new (class {
   addSlice(state: Record<string, unknown>) {
     this.state = {...this.state, ...{slice: state}};
     return this.state;
+  }
+
+  cache(key: string, value: unknown) {
+    this.state.cache[key] = value;
+    return this;
+  }
+
+  cacheHas(key: string) {
+    return (this.state.cache ?? {}).hasOwnProperty(key);
+  }
+
+  cacheDelete(key: string) {
+    if (this.cacheHas(key)) {
+      delete this.state.cache[key];
+    }
+    return this;
   }
 
   addBreakTimer(id: string, minutes: number, cb: () => void) {

@@ -10,4 +10,5 @@ export type Standup = {
 
 export type State = {
   standup: Standup;
+  cache: Record<string, unknown>;
 };
