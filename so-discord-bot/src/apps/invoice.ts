@@ -71,7 +71,9 @@ const invoice: BotApp = {
     {
       rule: () =>
         jobFrequency({day: new Range(1, 5), hour: 9}, 'America/New_York'),
-      job: bot => {},
+      job: async bot => {
+        await remindAllOverdue(bot);
+      },
     },
   ],
   binders: [
@@ -90,13 +92,7 @@ const invoice: BotApp = {
         }
 
         if (message.content === '!remind-overdue-invoices') {
-          const invoices = await getOverdueInvoices();
-          for (const invoice of invoices) {
-            const msg = `Sent reminder for invoice ID ${invoice.Id} - #${invoice.DocNumber}`;
-            log.debug(`SENDING - ${msg}`);
-            await sendInvoiceReminder(invoice.Id);
-            await message.reply(msg);
-          }
+          await remindAllOverdue(bot);
         }
       });
     },
