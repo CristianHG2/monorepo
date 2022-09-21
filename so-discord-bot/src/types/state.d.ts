@@ -6,6 +6,7 @@ export type Standup = {
   in_progress: boolean;
   pending: StandupParticipant[];
   participants: StandupParticipant[];
+  skip_next: StandupParticipant[];
 };
 
 export type State = {

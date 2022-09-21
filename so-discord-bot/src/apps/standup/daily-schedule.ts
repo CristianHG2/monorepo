@@ -33,10 +33,10 @@ export default {
   rule: () => jobFrequency({day: new Range(1, 5), hour: 12}, 'America/Bogota'),
 
   job: async (bot: Client) => {
-    const channel = await insensitiveFindChannel(bot, 'general');
+    const channel = await insensitiveFindChannel(bot, '🤝general');
 
     if (!channel) {
-      log.error('Could not find channel "general"');
+      log.error('Could not find channel "🤝general"');
       return;
     }
 
@@ -46,5 +46,6 @@ export default {
     );
 
     startStandupMonitor(bot, source, state.getParticipants());
+    state.clearSkipQueue();
   },
 };

@@ -1,6 +1,6 @@
 import {performAuthCodeFlow} from '../ngrok-oauth';
 
-export const getAccessToken = async () => {
+export const getAccessToken = async (forceAuth: boolean = false) => {
   return await performAuthCodeFlow({
     authUri: 'https://appcenter.intuit.com/connect/oauth2',
     exchangeUri: 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer',
@@ -9,5 +9,6 @@ export const getAccessToken = async () => {
       clientSecret: process.env.QUICKBOOKS_CLIENT_SECRET,
       scope: 'com.intuit.quickbooks.accounting',
     },
+    forceAuth,
   });
 };

@@ -4,7 +4,8 @@
   "type": "module",
   "workspaces": [
     "gh-pest",
-    "so-discord-bot"
+    "so-discord-bot",
+    "twilio-router"
   ],
   "prettier": {
     "tabWidth": 2,

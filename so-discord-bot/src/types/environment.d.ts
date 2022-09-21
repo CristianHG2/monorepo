@@ -15,6 +15,7 @@ declare global {
       QUICKBOOKS_CLIENT_ID: string;
       QUICKBOOKS_CLIENT_SECRET: string;
       QUICKBOOKS_REALM_ID: string;
+      DIALPAD_API_KEY: string;
     }
   }
 }

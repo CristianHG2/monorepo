@@ -19,7 +19,9 @@ export default {
         }
 
         if (message.content === '!print-state') {
-          await message.channel.send(JSON.stringify(state.state));
+          await message.channel.send(
+            JSON.stringify(state.state).substring(0, 1800) + '...',
+          );
         }
 
         if (message.content === '!current-system-time') {

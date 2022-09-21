@@ -19,11 +19,11 @@ export const clearStandup = () => {
 
 export const remindPending = async (bot: Client) => {
   const pending = state.getPendingParticipants();
-  const channel = await insensitiveFindChannel(bot, 'general');
+  const channel = await insensitiveFindChannel(bot, '🤝general');
   const members = await getMembers(bot);
 
   if (!channel) {
-    log.error('Could not find #general channel');
+    log.error('Could not find 🤝general channel');
     return;
   }
 
