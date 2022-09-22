@@ -1,5 +1,7 @@
-import {ServerlessFunctionSignature} from '@twilio-labs/serverless-runtime-types/types';
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
+import handlers from '../handlers';
+
+export type Action = keyof typeof handlers;
 
 export type MessagePayload = {
   CallSid: string;
@@ -31,11 +33,9 @@ export type MessagePayload = {
   ToCountry?: string;
 };
 
-export type TwilioHandler = ServerlessFunctionSignature<{}, MessagePayload>;
-
 export type CallFlowHandler<
   R extends MessagePayload = MessagePayload,
-  T extends VoiceResponse = VoiceResponse,
+  T extends ScopedTwiml = ScopedTwiml,
 > = (caller: Caller, request: R, response: T) => Promise<T> | T;
 
 /* Language and Companies considered in script */
@@ -51,26 +51,21 @@ export type RecordingType =
   | 'Voicemail'
   | 'Holiday';
 
-/* Map of recordings for all companies and languages */
-export type Recordings = {
-  [key in Company]: {
-    [key in RecordingType]: key extends 'LanguageSelect'
-      ? string
-      : {
-          [key in Language]: string;
-        };
-  };
+export type CompanyRecordings = {
+  [key in RecordingType]: key extends 'LanguageSelect'
+    ? string
+    : {
+        [key in Language]: string;
+      };
 };
 
 export type E164Number = `+1${number}`;
 
-export type CompanyNumbers = {
-  [key in Company]: E164Number[];
-};
-
 /* Underlying Caller Data - For use in Redis */
 export interface CallerData {
   id: string;
+  from: string;
+  to: string;
   language?: Language;
   company?: Company;
 }
@@ -90,4 +85,16 @@ export interface Caller<
    * returned based on the caller's language and company
    */
   getRecording(type: RecordingType): string;
+
+  hasLanguage(): boolean;
+
+  getTwilioLanguage(): 'en-US' | 'es-US';
+
+  errorRecording(): string;
 }
+
+export type ScopedTwiml = {
+  invalid: () => void;
+  gather: (options: {handler: Action; recording: RecordingType}) => void;
+  twiml: VoiceResponse;
+};

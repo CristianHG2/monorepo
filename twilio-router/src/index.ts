@@ -1,10 +1,12 @@
 import express from 'express';
-import {state} from './support/state';
-import {messages, setCompanyForCaller} from './support/utils';
+import {systemMessages} from './support/utils';
 import Twilio from 'twilio';
 import handlers from './handlers';
 import log from 'loglevel';
 import setUpLogger from './support/logger';
+import {state} from './support/state';
+import {setCompanyForCaller} from './services/caller';
+import {scopedTwiml} from './support/snippets';
 
 setUpLogger('debug');
 
@@ -26,15 +28,11 @@ app.post('/:action', async (req, res) => {
       `Invalid request or unable to find company for caller: ${req.params.action} ${company}`,
     );
 
-    return res.send(messages.badMessage());
+    return res.send(systemMessages.badMessage());
   }
 
   const action = req.params.action as keyof typeof handlers;
-  const xml = await handlers[action](
-    caller,
-    body,
-    new Twilio.twiml.VoiceResponse(),
-  );
+  const xml = (await handlers[action](caller, body, scopedTwiml(caller))).twiml;
 
   log.debug(`Sending response: ${xml.toString()}`);
 

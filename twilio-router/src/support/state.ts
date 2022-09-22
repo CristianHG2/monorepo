@@ -3,7 +3,7 @@
  */
 import {createClient, RedisClientType} from 'redis';
 import {Caller, CallerData, MessagePayload} from '../types';
-import {CallerObject} from './caller';
+import {CallerObject} from '../services/caller';
 
 export const state = new (class State {
   client: RedisClientType;
@@ -21,6 +21,8 @@ export const state = new (class State {
   async createCaller(payload: MessagePayload) {
     const data: CallerData = {
       id: payload.CallSid,
+      from: payload.From,
+      to: payload.To,
     };
 
     await this.setJson<CallerData>(payload.CallSid, data);
