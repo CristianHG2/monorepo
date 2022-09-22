@@ -1,4 +1,5 @@
 import {ServerlessFunctionSignature} from '@twilio-labs/serverless-runtime-types/types';
+import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
 
 export type MessagePayload = {
   CallSid: string;
@@ -30,10 +31,12 @@ export type MessagePayload = {
   ToCountry?: string;
 };
 
-export type IncomingCallHandler = ServerlessFunctionSignature<
-  {},
-  MessagePayload
->;
+export type TwilioHandler = ServerlessFunctionSignature<{}, MessagePayload>;
+
+export type CallFlowHandler<
+  R extends MessagePayload = MessagePayload,
+  T extends VoiceResponse = VoiceResponse,
+> = (caller: Caller, request: R, response: T) => Promise<T> | T;
 
 /* Language and Companies considered in script */
 export type Language = 'English' | 'Spanish';
@@ -51,14 +54,18 @@ export type RecordingType =
 /* Map of recordings for all companies and languages */
 export type Recordings = {
   [key in Company]: {
-    [key in RecordingType]: {
-      [key in Language]: string;
-    };
+    [key in RecordingType]: key extends 'LanguageSelect'
+      ? string
+      : {
+          [key in Language]: string;
+        };
   };
 };
 
+export type E164Number = `+1${number}`;
+
 export type CompanyNumbers = {
-  [key in Company]: `+1${number}`[];
+  [key in Company]: E164Number[];
 };
 
 /* Underlying Caller Data - For use in Redis */
@@ -75,12 +82,12 @@ export interface Caller<
 > {
   data: CallerData;
 
-  setLanguage(language: Language): void;
-  setCompany(company: Company): void;
+  setLanguage(language: Language): Promise<void>;
+  setCompany(company: Company): Promise<void>;
 
   /*
    * Get the string value of a requested recording. Should be
    * returned based on the caller's language and company
    */
-  getRecording(type: RecordingType): string | undefined;
+  getRecording(type: RecordingType): string;
 }

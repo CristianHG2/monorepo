@@ -4,7 +4,8 @@
   "scripts": {
     "watch": "tsc --watch",
     "dev": "tsc --watch & nodemon dist/index.js",
-    "serve": "node dist/server.js & nodemon dist/server.js"
+    "serve": "nodemon dist/index.js",
+    "ngrok": "ngrok http 3020 --subdomain=twilio-router-test"
   },
   "devDependencies": {
     "@twilio-labs/serverless-runtime-types": "^2.2.3"
@@ -12,6 +13,7 @@
   "dependencies": {
     "@twilio-labs/plugin-serverless": "^3.0.3",
     "express": "^4.18.1",
+    "loglevel": "^1.8.0",
     "redis": "^4.3.1",
     "twilio": "^3.82.0"
   }

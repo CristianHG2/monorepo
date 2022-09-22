@@ -2,15 +2,8 @@
  * Redis-powered state management for Twilio Router
  */
 import {createClient, RedisClientType} from 'redis';
-import {
-  Caller,
-  CallerData,
-  Company,
-  Language,
-  MessagePayload,
-  RecordingType,
-} from '../types';
-import {recordings} from './constants';
+import {Caller, CallerData, MessagePayload} from '../types';
+import {CallerObject} from './caller';
 
 export const state = new (class State {
   client: RedisClientType;
@@ -22,22 +15,7 @@ export const state = new (class State {
   async caller(payload: MessagePayload): Promise<Caller> {
     const data = await this.getJson<CallerData>(payload.CallSid);
 
-    const merge = async (newData: Partial<CallerData>) =>
-      await this.setJson<CallerData>(payload.CallSid, {
-        ...data,
-        ...newData,
-        id: payload.CallSid,
-      });
-
-    return {
-      data: data || (await this.createCaller(payload)),
-      setLanguage: (language: Language) => merge({language}),
-      setCompany: (company: Company) => merge({company}),
-      getRecording: (type: RecordingType) =>
-        data?.company && data?.language
-          ? recordings[data.company][type][data.language]
-          : undefined,
-    };
+    return new CallerObject(data || (await this.createCaller(payload)));
   }
 
   async createCaller(payload: MessagePayload) {
@@ -59,7 +37,7 @@ export const state = new (class State {
 
   async setJson<P>(key: string, value: P) {
     await this.ensureConnected();
-    return this.client.set(key, JSON.stringify(value));
+    await this.client.set(key, JSON.stringify(value));
   }
 
   async ensureConnected() {
