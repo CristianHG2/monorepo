@@ -13,7 +13,6 @@ const handler: CallFlowHandler<MessagePayload & {Digits: string}> = async (
   }
 
   const opt = parseInt(req.Digits);
-
   res.twiml.dial(testTargetNumber);
 
   return res;
