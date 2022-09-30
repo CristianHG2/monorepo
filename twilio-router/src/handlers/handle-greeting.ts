@@ -1,5 +1,5 @@
 import {CallFlowHandler, MessagePayload} from '../types';
-import {optionRange} from '../support/utils';
+import {optionRange, testTargetNumber} from '../support/utils';
 
 const handler: CallFlowHandler<MessagePayload & {Digits: string}> = async (
   caller,
@@ -11,6 +11,10 @@ const handler: CallFlowHandler<MessagePayload & {Digits: string}> = async (
     res.gather({handler: 'handleGreeting', recording: 'Greeting'});
     return res;
   }
+
+  const opt = parseInt(req.Digits);
+
+  res.twiml.dial(testTargetNumber);
 
   return res;
 };

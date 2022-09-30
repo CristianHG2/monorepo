@@ -1,4 +1,4 @@
-import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
+import VoiceResponse, {Dial} from 'twilio/lib/twiml/VoiceResponse';
 import handlers from '../handlers';
 
 export type Action = keyof typeof handlers;
@@ -97,4 +97,28 @@ export type ScopedTwiml = {
   invalid: () => void;
   gather: (options: {handler: Action; recording: RecordingType}) => void;
   twiml: VoiceResponse;
+};
+
+export type DialpadContact = {
+  id: DialpadId;
+  first_name: string;
+  last_name: string;
+  phones: string[];
+};
+
+export type DialpadContactUpdate = {
+  first_name?: string;
+  last_name?: string;
+  phones?: string[];
+};
+
+export type DialpadContactCreate = Omit<DialpadContact, 'id' | 'phones'> & {
+  phones?: string[];
+};
+
+export type DialpadId = number | string;
+
+export type TagObject = {
+  language?: Language;
+  company?: Company;
 };

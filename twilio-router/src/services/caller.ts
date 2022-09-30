@@ -6,10 +6,16 @@ import {
   Language,
   MessagePayload,
   RecordingType,
+  TagObject,
 } from '../types';
 import {state} from '../support/state';
 import log from 'loglevel';
 import {getCompanyByDID, getCompanyRecordings} from './companies';
+import {
+  createContact,
+  searchContact,
+  updateContactTags,
+} from './dialpad/contacts';
 
 export class CallerObject implements Caller {
   data: CallerData;
@@ -25,16 +31,36 @@ export class CallerObject implements Caller {
     });
   }
 
+  async updateDialpad() {
+    const contact =
+      (await searchContact(this.data.from)) ??
+      (await createContact({
+        first_name: '',
+        last_name: this.data.from,
+      }));
+
+    const tags = Object.fromEntries(
+      Object.entries({
+        language: this.data.language,
+        company: this.data.company,
+      }).filter(([k, v]) => v !== undefined),
+    ) as TagObject;
+
+    await updateContactTags(contact, tags);
+  }
+
   async setLanguage(language: Language) {
-    await this.merge({language});
     this.data.language = language;
+    await this.merge({language});
+    await this.updateDialpad();
 
     log.debug(`Caller ${this.data.id} set language to ${language}`);
   }
 
   async setCompany(company: Company) {
-    await this.merge({company});
     this.data.company = company;
+    await this.merge({company});
+    await this.updateDialpad();
 
     log.debug(`Caller ${this.data.id} set company to ${company}`);
   }

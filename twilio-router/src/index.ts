@@ -1,14 +1,19 @@
 import express from 'express';
 import {systemMessages} from './support/utils';
-import Twilio from 'twilio';
 import handlers from './handlers';
 import log from 'loglevel';
 import setUpLogger from './support/logger';
 import {state} from './support/state';
 import {setCompanyForCaller} from './services/caller';
-import {scopedTwiml} from './support/snippets';
+import {scopedTwiml} from './services/twiml';
+import dotenv from 'dotenv';
+import dialpad from './services/dialpad';
 
 setUpLogger('debug');
+
+dotenv.config({
+  path: '.env',
+});
 
 const app = express();
 const port = 3020;
@@ -40,5 +45,10 @@ app.post('/:action', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  log.info(`Twilio Router listening on port ${port}`);
 });
+
+/* Indexing Dialpad contacts */
+dialpad.contacts
+  .indexSharedContacts()
+  .then(() => log.info('Indexing job finished'));

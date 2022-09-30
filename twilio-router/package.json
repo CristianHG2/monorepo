@@ -12,8 +12,11 @@
   },
   "dependencies": {
     "@twilio-labs/plugin-serverless": "^3.0.3",
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "loglevel": "^1.8.0",
+    "prisma": "^4.3.1",
     "redis": "^4.3.1",
     "twilio": "^3.82.0"
   }

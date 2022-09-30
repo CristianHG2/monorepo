@@ -1,4 +1,4 @@
-import {Company, CompanyRecordings, E164Number} from '../types';
+import {Company, CompanyRecordings, E164Number, Language} from '../types';
 import locales from '../locales';
 
 type CompanyRepository = {
@@ -8,7 +8,7 @@ type CompanyRepository = {
   };
 };
 
-const companies: CompanyRepository = {
+export const companies: CompanyRepository = {
   OCMI: {
     numbers: ['+17178627978'],
     recordings: locales.ocmi,

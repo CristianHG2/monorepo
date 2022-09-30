@@ -2,7 +2,7 @@
  * Redis-powered state management for Twilio Router
  */
 import {createClient, RedisClientType} from 'redis';
-import {Caller, CallerData, MessagePayload} from '../types';
+import {Caller, CallerData, DialpadContact, MessagePayload} from '../types';
 import {CallerObject} from '../services/caller';
 
 export const state = new (class State {
@@ -46,5 +46,15 @@ export const state = new (class State {
     if (!this.client.isOpen) {
       await this.client.connect();
     }
+  }
+
+  /* Contacts */
+
+  async addContactToIndex(phone: string, contact: DialpadContact) {
+    await this.setJson(`dialpad:${phone}`, contact);
+  }
+
+  async getContactFromIndex(phone: string): Promise<DialpadContact | null> {
+    return this.getJson(`dialpad:${phone}`);
   }
 })();
