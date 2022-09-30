@@ -6,8 +6,8 @@ export type Action = keyof typeof handlers;
 export type MessagePayload = {
   CallSid: string;
   AccountSid: string;
-  From: string;
-  To: string;
+  From: E164Number;
+  To: E164Number;
   CallStatus:
     | 'queued'
     | 'ringing'
@@ -60,38 +60,6 @@ export type CompanyRecordings = {
 };
 
 export type E164Number = `+1${number}`;
-
-/* Underlying Caller Data - For use in Redis */
-export interface CallerData {
-  id: string;
-  from: string;
-  to: string;
-  language?: Language;
-  company?: Company;
-}
-
-/* Caller Object */
-export interface Caller<
-  L extends Language = undefined,
-  C extends Company = undefined,
-> {
-  data: CallerData;
-
-  setLanguage(language: Language): Promise<void>;
-  setCompany(company: Company): Promise<void>;
-
-  /*
-   * Get the string value of a requested recording. Should be
-   * returned based on the caller's language and company
-   */
-  getRecording(type: RecordingType): string;
-
-  hasLanguage(): boolean;
-
-  getTwilioLanguage(): 'en-US' | 'es-US';
-
-  errorRecording(): string;
-}
 
 export type ScopedTwiml = {
   invalid: () => void;

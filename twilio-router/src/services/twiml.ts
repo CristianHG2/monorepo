@@ -1,6 +1,7 @@
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
-import {Caller, ScopedTwiml} from '../types';
+import {ScopedTwiml} from '../types';
 import {uri} from '../support/utils';
+import {Caller} from '../types/callers';
 
 export const scopedTwiml = (caller: Caller): ScopedTwiml => {
   const twiml = new VoiceResponse();

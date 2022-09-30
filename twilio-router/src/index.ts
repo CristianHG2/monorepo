@@ -3,11 +3,12 @@ import {systemMessages} from './support/utils';
 import handlers from './handlers';
 import log from 'loglevel';
 import setUpLogger from './support/logger';
-import {state} from './support/state';
-import {setCompanyForCaller} from './services/caller';
 import {scopedTwiml} from './services/twiml';
 import dotenv from 'dotenv';
-import dialpad from './services/dialpad';
+import {contactCache} from './services/dialpad/contact-cache';
+import {register} from './services/callers/register';
+import {getCompanyByDID} from './services/companies';
+import {MessagePayload} from './types';
 
 setUpLogger('debug');
 
@@ -22,26 +23,37 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.post('/:action', async (req, res) => {
-  log.info(`Handling ${req.params.action} request`);
+  try {
+    log.info(`Handling ${req.params.action} request`);
 
-  const body = req.body;
-  const caller = await state.caller(body);
-  const company = await setCompanyForCaller(caller, body);
+    const body = req.body;
+    const caller = await register.getFromTwilioMessage(body);
+    const company = getCompanyByDID(body.To);
 
-  if (!company || !Object.keys(handlers).includes(req.params.action)) {
-    log.error(
-      `Invalid request or unable to find company for caller: ${req.params.action} ${company}`,
-    );
+    if (
+      company &&
+      !caller.hasCompany() &&
+      Object.keys(handlers).includes(req.params.action)
+    ) {
+      await caller.setCompany(company);
+    }
 
-    return res.send(systemMessages.badMessage());
+    if (!company && !caller.hasCompany()) {
+      log.error(`Invalid request or company: ${req.params.action} ${company}`);
+      return res.send(systemMessages.badMessage());
+    }
+
+    const action = req.params.action as keyof typeof handlers;
+    const xml = (await handlers[action](caller, body, scopedTwiml(caller)))
+      .twiml;
+
+    log.debug(`Sending response: ${xml.toString()}`);
+
+    res.send(xml.toString());
+  } catch (e) {
+    log.error('Error handling request', e);
+    res.send(systemMessages.badMessage().toString());
   }
-
-  const action = req.params.action as keyof typeof handlers;
-  const xml = (await handlers[action](caller, body, scopedTwiml(caller))).twiml;
-
-  log.debug(`Sending response: ${xml.toString()}`);
-
-  res.send(xml.toString());
 });
 
 app.listen(port, () => {
@@ -49,6 +61,4 @@ app.listen(port, () => {
 });
 
 /* Indexing Dialpad contacts */
-dialpad.contacts
-  .indexSharedContacts()
-  .then(() => log.info('Indexing job finished'));
+contactCache.build().then(() => log.info('Dialpad contact index built'));

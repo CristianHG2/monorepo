@@ -43,8 +43,11 @@ export default () => {
     update: async (id: DialpadId, data: DialpadContactUpdate) =>
       await client.patch(`contacts/${id}`, data),
 
-    create: async (data: DialpadContactCreate): Promise<DialpadContact> =>
-      await client.post('contacts', data),
+    create: async (data: DialpadContactCreate) =>
+      (await client.post<DialpadContact>('contacts', data)).data,
+
+    get: async (id: DialpadId) =>
+      (await client.get<DialpadContact>(`contacts/${id}`)).data,
   };
 
   return {
