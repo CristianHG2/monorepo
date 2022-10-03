@@ -1,5 +1,6 @@
 export const getSizeInBytes = (obj: any) => {
-  let str = null;
+  let str;
+
   if (typeof obj === 'string') {
     // If obj is a string, then use it
     str = obj;
@@ -8,6 +9,5 @@ export const getSizeInBytes = (obj: any) => {
     str = JSON.stringify(obj);
   }
   // Get the length of the Uint8Array
-  const bytes = new TextEncoder().encode(str).length;
-  return bytes;
+  return new TextEncoder().encode(str).length;
 };

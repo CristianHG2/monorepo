@@ -1,4 +1,4 @@
-import {Range, RecurrenceRule} from 'node-schedule';
+import {Range} from 'node-schedule';
 import {
   Client,
   MessageActionRow,

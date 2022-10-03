@@ -1,10 +1,6 @@
 import {Client, GuildMember, Intents} from 'discord.js';
 import log from 'loglevel';
 
-export type CustomClient = Client & {
-  members: GuildMember[];
-};
-
 export const startDiscordBot = async (botToken: string) => {
   const client = new Client({
     intents: [

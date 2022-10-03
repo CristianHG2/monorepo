@@ -1,4 +1,4 @@
-import {Client, GuildTextBasedChannel, TextBasedChannel} from 'discord.js';
+import {Client, GuildTextBasedChannel} from 'discord.js';
 import state from '../../support/state';
 import log from 'loglevel';
 
@@ -18,11 +18,6 @@ export const getMembers = async (bot: Client) => {
   return guild.members.list({
     limit: 100,
   });
-};
-
-export const getMemberById = async (bot: Client, id: string) => {
-  const guild = await getGuild(bot);
-  return guild.members.fetch(id);
 };
 
 export const insensitiveFindChannel = async (bot: Client, name: string) => {

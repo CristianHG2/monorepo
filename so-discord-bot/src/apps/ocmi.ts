@@ -1,7 +1,5 @@
 import {Client} from 'discord.js';
 import {getNumbersWithTarget} from '../services/dialpad';
-import {ray} from 'node-ray';
-import {log} from 'loglevel';
 import {Parser} from 'json2csv';
 
 const isOcmiCommand = (message: string) => message.startsWith('!ocmi');
