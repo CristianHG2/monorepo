@@ -1,4 +1,4 @@
-import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
+import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import {ScopedTwiml} from '../types';
 import {uri} from '../support/utils';
 import {Caller} from '../types/callers';

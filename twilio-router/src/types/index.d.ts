@@ -85,8 +85,3 @@ export type DialpadContactCreate = Omit<DialpadContact, 'id' | 'phones'> & {
 };
 
 export type DialpadId = number | string;
-
-export type TagObject = {
-  language?: Language;
-  company?: Company;
-};

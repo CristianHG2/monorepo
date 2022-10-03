@@ -1,15 +1,17 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
     "outDir": "dist",
     "rootDir": "src",
     "baseUrl": ".",
-    "types": ["vite/client"],
-    "jsx": "react-jsx"
   },
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.tsx",
+    "./src/**/*.tsx"
+  ],
+
+  "exclude": [
+    "./src/ui/main.tsx",
   ]
 }

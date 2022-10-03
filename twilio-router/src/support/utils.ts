@@ -1,8 +1,11 @@
 import Twilio from 'twilio';
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
-import handlers from '../handlers';
-import {Company, Language} from '../types';
-import companies from '../services/companies';
+import handlers from '../handlers/index';
+import {getCompanyByDID} from '../services/companies';
+import {Caller} from '../types/callers';
+import {Action} from '../types';
+import {Request} from 'express';
+import {register} from '../services/callers/register';
 
 export const baseUrl = 'https://twilio-router-test.ngrok.io';
 
@@ -27,15 +30,30 @@ export const optionRange = <T extends {Digits: string}>(
   return digits >= min && digits <= max;
 };
 
-export const companyNames = Object.keys(companies) as Company[];
-export const languageNames = ['English', 'Spanish'] as Language[];
+export const initializeRequest = (req: Request) =>
+  new Promise<{caller: Caller; action: Action} | Error>(
+    async (resolve, reject) => {
+      const body = req.body;
+      const caller = await register.getFromTwilioMessage(body);
+      const action = req.params.action;
 
-export const getSystemTags = () => {
-  const tagFactory = <T extends string>(sources: T[]) =>
-    sources.map(s => s.substring(0, 3).toUpperCase());
+      if (!Object.keys(handlers).includes(action)) {
+        reject(new Error(`Invalid action: ${action}`));
+      }
 
-  return {
-    companies: tagFactory(companyNames),
-    languages: tagFactory(languageNames),
-  };
-};
+      if (!caller.hasCompany()) {
+        const company = getCompanyByDID(body.To);
+
+        if (!company) {
+          return reject(new Error('Invalid company'));
+        }
+
+        await caller.setCompany(company);
+      }
+
+      resolve({
+        caller,
+        action: action as Action,
+      });
+    },
+  );

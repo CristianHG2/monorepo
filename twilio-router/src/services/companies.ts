@@ -5,7 +5,7 @@ import {
   Language,
   RecordingType,
 } from '../types';
-import locales from '../locales';
+import locales from '../locales/index';
 
 type CompanyRepository = {
   [key in Company]: {
