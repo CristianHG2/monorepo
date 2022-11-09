@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Zywave Lead Exporter",
+  "version": "1.0",
+  "description": "Generate a full CSV export of current Zywave views",
+  "content_scripts": [
+    {
+      "matches": ["https://miedge.net/*"],
+      "js": ["dist/extension.mjs"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "webRequest",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://miedge.net/*"
+  ],
+  "background": {
+    "service_worker": "dist/background.mjs"
+  },
+  "web_accessible_resources": [{
+    "matches": ["https://miedge.net/*"],
+    "resources": ["static/*.png"]
+  }],
+  "action": {
+    "default_popup": "static/popup.html",
+    "default_icon": {
+      "16": "static/icon.png",
+      "32": "static/icon.png",
+      "48": "static/icon.png",
+      "128": "static/icon.png"
+    }
+  }
+}

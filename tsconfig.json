@@ -20,6 +20,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "jsx": "react",
+    "typeRoots": [
+        "node_modules/@types",
+        "node_modules/chrome-types"
+    ]
   },
 }

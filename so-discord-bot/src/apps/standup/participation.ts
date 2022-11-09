@@ -11,19 +11,19 @@ import {StandupParticipant} from '../../types/state';
 export const clearStandup = () => {
   log.debug('Clearing standup');
 
-  clearTimeout(state.getTimer('standupTimer'));
-  clearInterval(state.getTimer('standupReminder'));
+  clearTimeout(state.standupTimer);
+  clearInterval(state.standupReminder);
 
   state.stopStandup();
 };
 
 export const remindPending = async (bot: Client) => {
   const pending = state.getPendingParticipants();
-  const channel = await insensitiveFindChannel(bot, 'general');
+  const channel = await insensitiveFindChannel(bot, '🤝general');
   const members = await getMembers(bot);
 
   if (!channel) {
-    log.error('Could not find #general channel');
+    log.error('Could not find 🤝general channel');
     return;
   }
 
@@ -60,7 +60,7 @@ export const startStandupMonitor = (
   };
 
   for (let [key, value] of Object.entries(timers)) {
-    state.setTimer(key as 'standupReminder' | 'standupTimer', value);
+    state[key as 'standupReminder' | 'standupTimer'] = value;
   }
 
   bot.on('interactionCreate', async interaction => {

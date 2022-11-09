@@ -8,15 +8,6 @@ export type Task = {
   status: TaskStatus;
 };
 
-export type Sprint = {
-  id: number;
-  dates: {
-    start: Date;
-    end: Date;
-  };
-  tasks: Task[];
-};
-
 export type Assignee = {
   id: number;
   name: string;

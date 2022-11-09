@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {MessageEmbed, MessageOptions, MessagePayload} from 'discord.js';
+import {MessageEmbed} from 'discord.js';
 
 const getQuote = async () => {
   return (

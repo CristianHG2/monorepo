@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum StepType {
+  Option
+  Transfer
+  Notice
+  End
+}
+
+enum Language {
+  English
+  Spanish
+}
+
+model Recording {
+  id               Int                @id @default(autoincrement())
+  name             String
+  Step             Step[]
+  CompanyRecording CompanyRecording[]
+}
+
+model Step {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  type StepType
+
+  isEntry Boolean @default(false)
+
+  recording   Recording @relation(fields: [recordingId], references: [id])
+  recordingId Int
+}
+
+model Company {
+  id               Int                @id @default(autoincrement())
+  name             String
+  CompanyRecording CompanyRecording[]
+}
+
+model CompanyRecording {
+  id Int @id @default(autoincrement())
+
+  language Language
+
+  recording   Recording @relation(fields: [recordingId], references: [id])
+  recordingId Int
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+}

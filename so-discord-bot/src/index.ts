@@ -11,9 +11,10 @@ import badWords from './apps/bad-words';
 import standup from './apps/standup';
 import devtools from './apps/devtools';
 import breakTimer from './apps/break-timer';
+import ocmi from './apps/ocmi';
 import {BotApp} from './types/apps';
 import log from 'loglevel';
-import dayjs, {QUnitType} from 'dayjs';
+import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 
@@ -28,6 +29,7 @@ const enabledApps = {
   devtools,
   breakTimer,
   invoice,
+  ocmi,
 };
 
 (async () => {

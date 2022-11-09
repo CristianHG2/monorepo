@@ -56,6 +56,47 @@ export default (bot: Client) => {
       return;
     }
 
+    if (interaction.content.includes('!skip-participant')) {
+      log.debug('Received participant skip request');
+
+      const mentions = interaction.mentions.users;
+
+      mentions.forEach(user => {
+        log.debug(`Skipped ${user.username} during next standup`);
+
+        state.skipDuringNextStandup({
+          id: user.id,
+        });
+
+        interaction.reply(`Skipping ${user.username} during next standup`);
+      });
+
+      return;
+    }
+
+    if (interaction.content.includes('!remove-from-pending')) {
+      log.debug('Received participant pending removal request');
+
+      const mentions = interaction.mentions.users;
+
+      mentions.forEach(user => {
+        log.debug(`Removing ${user.username} from pending list`);
+
+        state.removeFromActiveStandup({
+          id: user.id,
+        });
+
+        interaction.reply(`Removed ${user.username} from current standup`);
+      });
+
+      return;
+    }
+
+    if (interaction.content === '!clear-skips') {
+      state.clearSkipQueue();
+      await interaction.reply('Skips cleared');
+    }
+
     if (interaction.content === '!next-standup') {
       const nextInv = dayjs(
         dailySchedule.rule().nextInvocationDate(new Date()),

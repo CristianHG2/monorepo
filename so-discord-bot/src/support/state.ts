@@ -25,6 +25,7 @@ export default new (class {
         in_progress: false,
         pending: [],
         participants: [],
+        skip_next: [],
       },
       cache: {},
     };
@@ -53,9 +54,7 @@ export default new (class {
   }
 
   cacheDelete(key: string) {
-    if (this.cacheHas(key)) {
-      delete this.state.cache[key];
-    }
+    this.state.cache = {};
     return this;
   }
 
@@ -103,8 +102,28 @@ export default new (class {
     this.state.standup.pending = participants;
   }
 
+  skipDuringNextStandup(participant: StandupParticipant) {
+    if (!this.state.standup.skip_next) {
+      this.state.standup.skip_next = [];
+    }
+
+    this.state.standup.skip_next.push(participant);
+  }
+
+  clearSkipQueue() {
+    this.state.standup.skip_next = [];
+  }
+
   getParticipants() {
-    return this.state.standup.participants;
+    return this.state.standup.participants.filter(
+      p => !this.state.standup.skip_next.some(s => s.id === p.id),
+    );
+  }
+
+  removeFromActiveStandup(participant: StandupParticipant) {
+    this.state.standup.pending = this.state.standup.pending.filter(
+      e => e.id !== participant.id,
+    );
   }
 
   addParticipant(id: StandupParticipant) {
@@ -131,7 +150,7 @@ export default new (class {
   }
 
   listParticipants() {
-    return this.state.standup.participants;
+    return this.getParticipants();
   }
 
   removeParticipant(id: StandupParticipant) {
@@ -147,8 +166,17 @@ export default new (class {
         return;
       }
 
-      this.state = JSON.parse(data.toString());
-      log.debug('state loaded');
+      try {
+        this.state = JSON.parse(data.toString());
+        log.debug('state loaded');
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          log.error('failed to parse state.json, starting fresh');
+          fs.writeFileSync('./state.json', '{}');
+
+          this.load();
+        }
+      }
     });
   }
 

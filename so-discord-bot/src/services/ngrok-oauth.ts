@@ -52,6 +52,7 @@ export const getAuthTunnel = async () => {
 interface Base {
   authUri: string;
   exchangeUri: string;
+  forceAuth: boolean;
 }
 
 interface WithOptions extends Base {
@@ -74,6 +75,7 @@ export const performAuthCodeFlow = async ({
   exchangeUri,
   options,
   generators,
+  forceAuth = false,
 }: TunnelOptions) => {
   const query = (generators?.authorization() ?? options) as OAuthOptions;
   const hash = createHash('md5')
@@ -81,7 +83,7 @@ export const performAuthCodeFlow = async ({
     .digest('base64')
     .toString();
 
-  if (state.cacheHas(hash)) {
+  if (state.cacheHas(hash) && !forceAuth) {
     return state.state.cache[hash];
   }
 

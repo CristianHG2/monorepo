@@ -79,8 +79,8 @@ const invoice: BotApp = {
   binders: [
     bot => {
       bot.on('messageCreate', async message => {
-        if (message.content === '!invoice') {
-          console.log(await getAccessToken());
+        if (message.content === '!force-qbo-auth') {
+          console.log(await getAccessToken(true));
         }
 
         if (message.content === '!clear-quickbooks-api') {

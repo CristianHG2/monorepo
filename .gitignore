@@ -4,3 +4,5 @@ node_modules
 **/.DS_Store
 .idea
 .secrets
+/twilio-router/tsconfig-server.tsbuildinfo
+/tsconfig.tsbuildinfo
