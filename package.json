@@ -5,7 +5,8 @@
   "workspaces": [
     "gh-pest",
     "so-discord-bot",
-    "twilio-router"
+    "twilio-router",
+    "zywave"
   ],
   "prettier": {
     "tabWidth": 2,

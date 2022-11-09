@@ -1,0 +1,6 @@
+dist
+*.tsbuildinfo
+zywave-extension.zip
+zywave-extension
+zywave-extension.crx
+zywave-extension.pem

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {AdjustmentsVerticalIcon} from '@heroicons/react/24/outline';
 import Title from '../components/Typography/Title';
 import Button from '../components/Button';
@@ -6,6 +6,8 @@ import {Cog6ToothIcon, PlusCircleIcon} from '@heroicons/react/24/solid';
 import PlanStepBox from './DialPlan/PlanStepBox';
 import PlanArrowRight from './DialPlan/PlanArrowRight';
 import IvrOption from './DialPlan/IvrOption';
+import useRpc from '../support/useRpc';
+import {prisma} from '../../support/prisma';
 
 export const rpcDefinition = async () => {
   return {
@@ -40,7 +42,7 @@ const DialPlan: FC<object> = () => {
           </div>
         </PlanStepBox>
         <PlanArrowRight />
-        <PlanStepBox label="IVR Menu 1">
+        <PlanStepBox label="IVR Menu / Transfers">
           <div className="flex flex-col gap-4">
             <IvrOption number={'1'} legend={'Sales'} />
             <IvrOption number={'2'} legend={'Payroll'} />

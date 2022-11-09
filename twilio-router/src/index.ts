@@ -53,7 +53,7 @@ app.post('/:action', async (req, res) => {
   try {
     log.info(`Handling ${req.params.action} request`);
     const body = req.body;
-    const request = await initializeRequest(body);
+    const request = await initializeRequest(req);
 
     if (request instanceof Error) {
       log.error(request);
