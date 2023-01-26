@@ -36,7 +36,7 @@ export default {
           }
 
           const result = (await getAssignments(sprintId))
-            .sort((a, b) => a.tasks - b.tasks)
+            .sort((a, b) => b.tasks - a.tasks)
             .map(result => `${result.name} - ${result.tasks} tasks`)
             .join('\n');
 
