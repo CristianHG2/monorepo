@@ -13,12 +13,19 @@ export default {
           const [, ...argument] = interaction.content.split(' ');
           const sprint = argument.join(' ');
 
+          if (!sprint) {
+            await interaction.reply({
+              content: 'Please provide a sprint',
+            });
+            return;
+          }
+
           const initialInteraction = await interaction.reply({
             content: `Please wait while I fetch the assignments for sprint ${sprint}...`,
           });
 
           const sprintId = (await getSprints()).find(s =>
-            s.name.endsWith(sprint),
+            s.name.includes(sprint),
           )?.id;
 
           if (!sprintId) {
