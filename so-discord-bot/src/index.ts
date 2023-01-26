@@ -17,6 +17,7 @@ import log from 'loglevel';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import notion from './apps/notion/assignments';
 
 setUpLogger('debug');
 
@@ -30,6 +31,7 @@ const enabledApps = {
   breakTimer,
   invoice,
   ocmi,
+  notion,
 };
 
 (async () => {
