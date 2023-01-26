@@ -24,10 +24,27 @@ export const getSprints = async () => {
   );
 };
 
+export const isDeveloper = (person: PersonUserObjectResponse) =>
+  [
+    'camilo@lifespikes.com',
+    'cristian@lifespikes.com',
+    'guerrero.santiago@correounivalle.edu.co',
+    'amilkar0711@gmail.com',
+    'cdvillada6@misena.edu.co',
+    'juan.valencia.ramirez@correounivalle.edu.co',
+    'kevin@ocmiwc.com',
+    'raimir@ocmiwc.com',
+    'jstorres0211@gmail.com',
+  ].includes(person.person.email ?? '');
+
 export const getAssignments = async (sprint: string) => {
   const assignees: Record<string, {name: string; tasks: number}> = {};
 
   (await getUsers()).results.forEach(user => {
+    if (user.type !== 'person' || !isDeveloper(user)) {
+      return;
+    }
+
     assignees[user.id] = {
       name: user.name ?? '',
       tasks: 0,
