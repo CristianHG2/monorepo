@@ -1,12 +1,13 @@
-import {Client, GuildMember, Intents} from 'discord.js';
+import {Client, GatewayIntentBits} from 'discord.js';
 import log from 'loglevel';
 
 export const startDiscordBot = async (botToken: string) => {
   const client = new Client({
     intents: [
-      Intents.FLAGS.GUILDS,
-      Intents.FLAGS.GUILD_MESSAGES,
-      Intents.FLAGS.GUILD_MEMBERS,
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.MessageContent,
     ],
   });
 

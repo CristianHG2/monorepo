@@ -172,7 +172,7 @@ export default new (class {
       } catch (e) {
         if (e instanceof SyntaxError) {
           log.error('failed to parse state.json, starting fresh');
-          fs.writeFileSync('./state.json', '{}');
+          fs.writeFileSync('./state.json', '{"standup":{"in_progress":false,"pending":[],"participants":[],"skip_next":[]},"cache":{}}');
 
           this.load();
         }

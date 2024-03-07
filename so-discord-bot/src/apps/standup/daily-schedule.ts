@@ -1,9 +1,12 @@
 import {Range} from 'node-schedule';
 import {
+  ActionRowBuilder,
+  BaseMessageOptions,
+  ButtonBuilder,
+  ButtonStyle,
   Client,
-  MessageActionRow,
-  MessageButton,
-  MessageOptions,
+  MessageCreateOptions,
+  MessagePayload,
 } from 'discord.js';
 import log from 'loglevel';
 import state from '../../support/state';
@@ -13,18 +16,20 @@ import {makeEmbed} from './notice-embed';
 import {startStandupMonitor} from './participation';
 import {jobFrequency} from '../../support/scheduler';
 
-const standupMessage = async (): Promise<MessageOptions> => {
+const standupMessage = async (): Promise<MessageCreateOptions> => {
+  const row = (new ActionRowBuilder<ButtonBuilder>({
+    components: [
+      (new ButtonBuilder())
+        .setCustomId(actions.ACKNOWLEDGE)
+        .setStyle(ButtonStyle.Success)
+        .setLabel('I have completed my stand-up')
+        .setEmoji('✅')
+    ]
+  }));
+
   return {
     content: `@everyone Time for stand-up, please provide responses in #general. 😎`,
-    components: [
-      new MessageActionRow().addComponents(
-        new MessageButton()
-          .setCustomId(actions.ACKNOWLEDGE)
-          .setStyle('SUCCESS')
-          .setEmoji('✅')
-          .setLabel('I have completed my stand-up'),
-      ),
-    ],
+    components: [row],
     embeds: [await makeEmbed()],
   };
 };

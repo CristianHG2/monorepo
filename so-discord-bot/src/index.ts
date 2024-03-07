@@ -25,13 +25,13 @@ dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
 const enabledApps = {
-  badWords,
+  // badWords,
   standup,
-  devtools,
-  breakTimer,
-  invoice,
-  ocmi,
-  notion,
+  // devtools,
+  // breakTimer,
+  // invoice,
+  // ocmi,
+  // notion,
 };
 
 (async () => {

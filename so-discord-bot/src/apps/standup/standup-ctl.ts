@@ -1,8 +1,10 @@
 import {
+  ActionRowBuilder,
   Client,
-  MessageActionRow,
-  MessageEmbed,
-  MessageSelectMenu,
+  EmbedBuilder, Role,
+  SelectMenuBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
 } from 'discord.js';
 import log from 'loglevel';
 import state from '../../support/state';
@@ -12,7 +14,7 @@ import {actions} from './constants';
 import dailySchedule from './daily-schedule';
 import dayjs from 'dayjs';
 
-const memberListEmbed = async (bot: Client): Promise<MessageEmbed> => {
+const memberListEmbed = async (bot: Client): Promise<EmbedBuilder> => {
   const members = await getMembers(bot);
   const current = state.listParticipants();
   const names = current.map(e => {
@@ -20,11 +22,10 @@ const memberListEmbed = async (bot: Client): Promise<MessageEmbed> => {
     return `- ${user?.displayName}`;
   });
 
-  return new MessageEmbed({
-    title: 'Stand-up Participants',
-    description: names.join(`\n`) || 'No participants',
-    color: 'DARK_PURPLE',
-  });
+  return (new EmbedBuilder())
+    .setTitle('Stand-up Participants')
+    .setDescription(names.join(`\n`) || 'No participants')
+    .setColor('#301934');
 };
 
 const isOnList = (member: {id: string}) =>
@@ -32,20 +33,22 @@ const isOnList = (member: {id: string}) =>
 
 const toggleMemberEmbed = async (bot: Client): Promise<any> => {
   const members = await getMembers(bot);
+  const filtered = members
+    .filter(e => !e.user.bot)
+    .filter(e => e.roles.cache.find(e => e.name === 'Amigos') === undefined)
+    .map(e => (new StringSelectMenuOptionBuilder())
+      .setLabel(e.displayName)
+      .setValue(e.id)
+    );
 
-  return new MessageActionRow().addComponents(
-    new MessageSelectMenu()
-      .setCustomId(actions.TOGGLE_MEMBER)
-      .setPlaceholder('Add or remove a standup participant')
-      .setOptions(
-        members
-          .filter(e => !e.user.bot)
-          .map(e => ({
-            label: e.displayName,
-            value: e.id,
-          })),
-      ),
-  );
+  return (new ActionRowBuilder<SelectMenuBuilder>({
+    components: [
+      (new StringSelectMenuBuilder())
+        .setCustomId(actions.TOGGLE_MEMBER)
+        .setPlaceholder('Add or remove a standup participant')
+        .addOptions(filtered)
+    ]
+  }));
 };
 
 const hooks = new events.EventEmitter();

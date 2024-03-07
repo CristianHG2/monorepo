@@ -22,7 +22,7 @@ export const getMembers = async (bot: Client) => {
 
 export const insensitiveFindChannel = async (bot: Client, name: string) => {
   const guild = await getGuild(bot);
-  return (await guild.channels.cache).find(
-    channel => channel.name.toLowerCase().includes(name) && channel.isText(),
+  return guild.channels.cache.find(
+    channel => channel.name.toLowerCase().includes(name) && channel.isTextBased(),
   ) as GuildTextBasedChannel;
 };
