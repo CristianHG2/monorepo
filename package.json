@@ -18,5 +18,8 @@
   },
   "dependencies": {
     "prettier": "^2.7.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.2"
   }
 }
