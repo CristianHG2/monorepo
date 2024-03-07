@@ -17,6 +17,7 @@
     "endOfLine": "auto"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "prettier": "^2.7.1"
   },
   "devDependencies": {

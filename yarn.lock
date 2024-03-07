@@ -4720,13 +4720,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.0.2":
-  version: 16.0.2
-  resolution: "dotenv@npm:16.0.2"
-  checksum: ca8f9ca2d67929c7771069f4c31b4e46b9932621009e658e5afd655dde2d69b77642bf36dbc9e72bc170523dfd908a9ee41c26f034c1fdc605ace3b1b4b10faf
-  languageName: node
-  linkType: hard
-
 "dotenv@npm:^16.4.5":
   version: 16.4.5
   resolution: "dotenv@npm:16.4.5"
@@ -6180,6 +6173,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "github-apps@workspace:."
   dependencies:
+    dotenv: ^16.4.5
     prettier: ^2.7.1
     typescript: ^5.4.2
   languageName: unknown
@@ -10892,7 +10886,7 @@ __metadata:
     "@zoltu/typescript-transformer-append-js-extension": ^1.0.1
     autoprefixer: ^10.4.12
     axios: ^0.27.2
-    dotenv: ^16.0.2
+    dotenv: ^16.4.5
     express: ^4.18.1
     loglevel: ^1.8.0
     loglevel-plugin-prefix: ^0.8.4

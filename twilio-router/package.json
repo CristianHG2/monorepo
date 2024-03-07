@@ -31,7 +31,7 @@
   "dependencies": {
     "@prisma/client": "^4.4.0",
     "axios": "^0.27.2",
-    "dotenv": "^16.0.2",
+    "dotenv": "^16.4.5",
     "express": "^4.18.1",
     "loglevel": "^1.8.0",
     "loglevel-plugin-prefix": "^0.8.4",
