@@ -78,10 +78,15 @@ export const startStandupMonitor = (
       const actor = interaction?.member?.user;
       actor && state.markAcknowledged({id: actor.id});
 
-      await interaction.reply({
-        content: `Thank you, ${actor?.username}! Response recorded! 🥳️`,
-        ephemeral: true,
-      });
+      try {
+        await interaction.reply({
+          content: `Thank you, ${actor?.username}! Response recorded! 🥳️`,
+          ephemeral: true,
+        });
+      } catch (e) {
+        log.debug(`Failed to reply to interaction`);
+        log.error(e);
+      }
     }
   });
 };
