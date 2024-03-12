@@ -79,7 +79,7 @@ export const startStandupMonitor = (
       actor && state.markAcknowledged({id: actor.id});
 
       try {
-        await interaction.reply({
+        await interaction.followUp({
           content: `Thank you, ${actor?.username}! Response recorded! 🥳️`,
           ephemeral: true,
         });
